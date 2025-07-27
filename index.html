@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parth Patil - Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- 
+        IMPORTANT: For the resume links to work, place your resume PDF file 
+        named "Parth Patil Resume 27 July, 2025.pdf" in the same folder as this HTML file.
+        You also need to place your profile image named "profile.jpg" in this folder.
+    -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Dark Blue-Gray Background */
+            color: #d1d5db; /* Light Gray Text */
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .section-title {
+            color: #ffffff;
+        }
+        .accent-color {
+            color: #38bdf8; /* Light Blue Accent */
+        }
+        .btn-primary {
+            background-color: #38bdf8;
+            color: #111827;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #0ea5e9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);
+        }
+        .btn-secondary {
+            background-color: transparent;
+            color: #38bdf8;
+            border: 2px solid #38bdf8;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #38bdf8;
+            color: #111827;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #374151;
+        }
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            padding: 20px 40px;
+            box-sizing: border-box;
+        }
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            padding-right: 20px;
+            text-align: right;
+        }
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            padding-left: 20px;
+            text-align: left;
+        }
+        .timeline-content {
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .timeline-dot {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background-color: #38bdf8;
+            border-radius: 50%;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+         @media screen and (max-width: 768px) {
+            .timeline::before {
+                left: 8px;
+            }
+            .timeline-item {
+                width: 100%;
+                padding-left: 40px;
+                padding-right: 15px;
+            }
+            .timeline-item:nth-child(odd), .timeline-item:nth-child(even) {
+                left: 0;
+                text-align: left;
+            }
+            .timeline-dot {
+                left: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-white">Parth Patil</a>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="#experience" class="text-gray-300 hover:text-white transition">Experience</a>
+                <a href="#projects" class="text-gray-300 hover:text-white transition">Projects</a>
+                <a href="#skills" class="text-gray-300 hover:text-white transition">Skills</a>
+                <a href="Parth Patil Resume 27 July, 2025.pdf" target="_blank" class="btn-secondary font-semibold py-2 px-4 rounded-lg">Resume</a>
+                <a href="#contact" class="btn-primary font-semibold py-2 px-4 rounded-lg">Contact</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-white focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#experience" class="block py-2 text-gray-300 hover:text-white">Experience</a>
+            <a href="#projects" class="block py-2 text-gray-300 hover:text-white">Projects</a>
+            <a href="#skills" class="block py-2 text-gray-300 hover:text-white">Skills</a>
+            <a href="#education" class="block py-2 text-gray-300 hover:text-white">Education</a>
+            <a href="Parth Patil Resume 27 July, 2025.pdf" target="_blank" class="block py-2 text-gray-300 hover:text-white">Resume</a>
+            <a href="#contact" class="block mt-2 btn-primary font-semibold py-2 px-4 rounded-lg text-center">Contact</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <!-- Hero/About Section -->
+        <section id="about" class="flex flex-col md:flex-row items-center justify-between py-20">
+            <div class="md:w-2/3 text-center md:text-left mb-10 md:mb-0">
+                <h1 class="text-4xl md:text-6xl font-bold text-white leading-tight">
+                    Hi, I'm Parth Patil
+                </h1>
+                <p class="text-xl md:text-2xl mt-2 accent-color font-semibold">
+                    Backend Developer & Tech Enthusiast
+                </p>
+                <p class="mt-6 text-lg max-w-2xl mx-auto md:mx-0">
+                    A passionate Computer Science student at VIT Bhopal with a focus on backend development and cloud technologies. I enjoy building robust applications and developing creative solutions to complex problems.
+                </p>
+                <div class="mt-8 flex flex-wrap justify-center md:justify-start items-center gap-4">
+                    <a href="mailto:parthpatil2605@gmail.com" class="btn-primary font-semibold py-3 px-6 rounded-lg flex items-center space-x-2">
+                        <i class="fas fa-envelope"></i>
+                        <span>Get in Touch</span>
+                    </a>
+                </div>
+                 <div class="mt-6 flex justify-center md:justify-start space-x-6">
+                    <a href="https://www.linkedin.com/in/pvp2605" target="_blank" class="text-gray-300 hover:text-white transition text-3xl">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://github.com/Parthpatil2605" target="_blank" class="text-gray-300 hover:text-white transition text-3xl">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="md:w-1/3 flex justify-center">
+                <div class="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden ring-4 ring-offset-4 ring-offset-gray-900 ring-blue-500 shadow-lg">
+                    <img src="profile.jpg" alt="Parth Patil" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/320x320/111827/d1d5db?text=Parth+Patil';">
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="py-20">
+            <h2 class="section-title text-3xl md:text-4xl font-bold text-center mb-12">Professional Experience</h2>
+            <div class="relative timeline max-w-4xl mx-auto">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-effect">
+                        <p class="text-sm accent-color">October 2024</p>
+                        <h3 class="text-xl font-bold text-white mt-1">Hacktoberfest Contributor</h3>
+                        <p class="text-md font-semibold text-gray-300">Open Source Contribution</p>
+                        <p class="mt-2 text-gray-400">Actively contributed to various open-source projects, focusing on backend development and documentation.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-effect">
+                        <p class="text-sm accent-color">May 2024 - Aug 2024</p>
+                        <h3 class="text-xl font-bold text-white mt-1">GirlScript Summer of Code Contributor</h3>
+                        <p class="text-md font-semibold text-gray-300">Open Source Program</p>
+                        <p class="mt-2 text-gray-400">Contributed to projects, focusing on backend tasks and API development during the summer of code program.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-effect">
+                        <p class="text-sm accent-color">Feb 2024 - Present</p>
+                        <h3 class="text-xl font-bold text-white mt-1">Content Lead and Anchor</h3>
+                        <p class="text-md font-semibold text-gray-300">The Electric Vehicle Club</p>
+                        <p class="mt-2 text-gray-400">Led a team of 5 in content creation, event planning, and technical documentation. Anchored three technical and promotional events.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-effect">
+                        <p class="text-sm accent-color">Hackathon</p>
+                        <h3 class="text-xl font-bold text-white mt-1">Participant at Health Hack</h3>
+                        <p class="text-md font-semibold text-gray-300">Competitive Programming Event</p>
+                        <p class="mt-2 text-gray-400">Developed an innovative solution focused on healthcare technology within a competitive, time-bound environment.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="py-20">
+            <h2 class="section-title text-3xl md:text-4xl font-bold text-center mb-12">My Projects</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1: Health Ease -->
+                <div class="glass-effect rounded-lg p-6 flex flex-col justify-between hover:border-blue-500 transition border border-transparent">
+                    <div>
+                        <h3 class="text-xl font-bold text-white">Health Ease</h3>
+                        <p class="mt-2">A centralized digital health record platform for secure and efficient healthcare data management.</p>
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            <span class="bg-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Node.js</span>
+                            <span class="bg-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Express.js</span>
+                            <span class="bg-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">MongoDB</span>
+                            <span class="bg-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">AWS</span>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <a href="https://github.com/Parthpatil2605/Health-Ease" target="_blank" class="font-semibold text-blue-400 hover:text-blue-300">View on GitHub <i class="fas fa-arrow-right ml-1"></i></a>
+                    </div>
+                </div>
+
+                <!-- Project 2: VITStay -->
+                <div class="glass-effect rounded-lg p-6 flex flex-col justify-between hover:border-blue-500 transition border border-transparent">
+                    <div>
+                        <h3 class="text-xl font-bold text-white">VITStay</h3>
+                        <p class="mt-2">A web application for smart hostel selection featuring 3D visualization, roommate selection, and complaint management.</p>
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            <span class="bg-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">React.js</span>
+                            <span class="bg-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Node.js</span>
+                            <span class="bg-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Three.js</span>
+                            <span class="bg-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">MongoDB</span>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <a href="https://github.com/Parthpatil2605/VITStay" target="_blank" class="font-semibold text-blue-400 hover:text-blue-300">View on GitHub <i class="fas fa-arrow-right ml-1"></i></a>
+                    </div>
+                </div>
+
+                <!-- Project 3: Research Paper -->
+                <div class="glass-effect rounded-lg p-6 flex flex-col justify-between hover:border-blue-500 transition border border-transparent">
+                    <div>
+                        <h3 class="text-xl font-bold text-white">Research Paper: HealthEase</h3>
+                        <p class="mt-2">Co-authored a paper titled 'HealthEase: Connecting Lives with Care', accepted at 'WorldSUAS 2025', an IEEE conference.</p>
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            <span class="bg-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Research</span>
+                            <span class="bg-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Healthcare IT</span>
+                             <span class="bg-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">IEEE</span>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <a href="#" class="font-semibold text-gray-500 cursor-not-allowed">Publication Pending</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="py-20">
+            <h2 class="section-title text-3xl md:text-4xl font-bold text-center mb-12">Education</h2>
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- B.Tech -->
+                <div class="glass-effect rounded-lg p-6">
+                    <p class="text-sm accent-color">Sept 2023 - Ongoing</p>
+                    <h3 class="text-xl font-bold text-white mt-1">Bachelor of Technology - BTech, CSE</h3>
+                    <p class="text-md font-semibold text-gray-300">VIT Bhopal University</p>
+                    <p class="mt-2 text-gray-400">CGPA: 9.00 / 10.00</p>
+                </div>
+                <!-- Class XII -->
+                <div class="glass-effect rounded-lg p-6">
+                    <p class="text-sm accent-color">May 2023</p>
+                    <h3 class="text-xl font-bold text-white mt-1">Class XII (SSC)</h3>
+                    <p class="text-md font-semibold text-gray-300">Global Public School and Jr. College, Dindori</p>
+                    <p class="mt-2 text-gray-400">Percentage: 77%</p>
+                </div>
+                <!-- Class X -->
+                <div class="glass-effect rounded-lg p-6 md:col-span-2">
+                     <p class="text-sm accent-color">May 2021</p>
+                    <h3 class="text-xl font-bold text-white mt-1">Class X (ICSE)</h3>
+                    <p class="text-md font-semibold text-gray-300">Podar International School, Nashik</p>
+                    <p class="mt-2 text-gray-400">Percentage: 96.16%</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Certifications Section -->
+        <section id="certifications" class="py-20">
+            <h2 class="section-title text-3xl md:text-4xl font-bold text-center mb-12">Certifications</h2>
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="glass-effect rounded-lg p-6 text-center">
+                    <i class="fas fa-certificate text-4xl accent-color mb-3"></i>
+                    <h3 class="text-lg font-bold text-white">Fundamentals of AI and ML</h3>
+                </div>
+                <div class="glass-effect rounded-lg p-6 text-center">
+                    <i class="fas fa-certificate text-4xl accent-color mb-3"></i>
+                    <h3 class="text-lg font-bold text-white">Python Essentials</h3>
+                </div>
+                <div class="glass-effect rounded-lg p-6 text-center">
+                    <i class="fas fa-certificate text-4xl accent-color mb-3"></i>
+                    <h3 class="text-lg font-bold text-white">MATLAB Onramp</h3>
+                </div>
+                 <div class="glass-effect rounded-lg p-6 text-center">
+                    <i class="fas fa-certificate text-4xl accent-color mb-3"></i>
+                    <h3 class="text-lg font-bold text-white">Programming in Java</h3>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="py-20">
+            <h2 class="section-title text-3xl md:text-4xl font-bold text-center mb-12">My Skills</h2>
+            <div class="max-w-4xl mx-auto">
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-8 text-center">
+                    <div class="p-4 glass-effect rounded-lg"><i class="fab fa-java text-4xl accent-color mb-2"></i><p>Java</p></div>
+                    <div class="p-4 glass-effect rounded-lg"><i class="fab fa-js-square text-4xl accent-color mb-2"></i><p>JavaScript</p></div>
+                    <div class="p-4 glass-effect rounded-lg"><i class="fas fa-database text-4xl accent-color mb-2"></i><p>SQL</p></div>
+                    <div class="p-4 glass-effect rounded-lg"><i class="fab fa-node-js text-4xl accent-color mb-2"></i><p>Node.js</p></div>
+                    <div class="p-4 glass-effect rounded-lg"><i class="fas fa-server text-4xl accent-color mb-2"></i><p>Express.js</p></div>
+                    <div class="p-4 glass-effect rounded-lg"><i class="fab fa-aws text-4xl accent-color mb-2"></i><p>AWS</p></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-gray-900/80 border-t border-gray-700">
+        <div class="container mx-auto px-6 py-12 text-center">
+            <h2 class="text-2xl font-bold text-white">Get In Touch</h2>
+            <p class="mt-4 max-w-xl mx-auto">I'm currently open to new opportunities and collaborations. Feel free to reach out via email or connect with me on social media.</p>
+            <div class="mt-8">
+                <a href="mailto:parthpatil2605@gmail.com" class="btn-primary font-semibold py-3 px-8 rounded-lg text-lg">
+                    Say Hello
+                </a>
+            </div>
+            <div class="mt-8 flex justify-center space-x-6">
+                <a href="https://www.linkedin.com/in/pvp2605" target="_blank" class="text-gray-400 hover:text-white transition text-2xl"><i class="fab fa-linkedin"></i></a>
+                <a href="https://github.com/Parthpatil2605" target="_blank" class="text-gray-400 hover:text-white transition text-2xl"><i class="fab fa-github"></i></a>
+            </div>
+            <p class="mt-8 text-gray-500">&copy; 2025 Parth Patil. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Basic Setup ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>
