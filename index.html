@@ -15,117 +15,175 @@
         You also need to place your profile image named "profile.jpg" in this folder.
     -->
     <style>
+        :root {
+            --bg-color: #0c101d; /* Near-black space color */
+            --text-color: #d1d5db;
+            --text-color-strong: #ffffff;
+            --glass-bg: rgba(31, 41, 55, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --timeline-line: #374151;
+            --accent-color: #38bdf8;
+            --accent-color-darker: #0ea5e9;
+            --btn-primary-text: #111827;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #111827; /* Dark Blue-Gray Background */
-            color: #d1d5db; /* Light Gray Text */
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            cursor: none; /* Hide default cursor */
         }
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .section-title {
-            color: #ffffff;
-        }
-        .accent-color {
-            color: #38bdf8; /* Light Blue Accent */
-        }
-        .btn-primary {
-            background-color: #38bdf8;
-            color: #111827;
-            transition: all 0.3s ease;
-        }
-        .btn-primary:hover {
-            background-color: #0ea5e9;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);
-        }
-        .btn-secondary {
-            background-color: transparent;
-            color: #38bdf8;
-            border: 2px solid #38bdf8;
-            transition: all 0.3s ease;
-        }
-        .btn-secondary:hover {
-            background-color: #38bdf8;
-            color: #111827;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);
-        }
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
+
+        /* Starfield Canvas */
+        #starfield-canvas {
+            position: fixed;
             top: 0;
-            bottom: 0;
-            width: 2px;
-            background-color: #374151;
-        }
-        .timeline-item {
-            position: relative;
-            width: 50%;
-            padding: 20px 40px;
-            box-sizing: border-box;
-        }
-        .timeline-item:nth-child(odd) {
             left: 0;
-            padding-right: 20px;
-            text-align: right;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
         }
-        .timeline-item:nth-child(even) {
-            left: 50%;
-            padding-left: 20px;
-            text-align: left;
+
+        /* Custom Cursor */
+        #custom-cursor {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%) scale(1);
+            transition: width 0.3s, height 0.3s, transform 0.3s, background-color 0.3s;
+            z-index: 9999;
         }
-        .timeline-content {
-            padding: 20px;
-            border-radius: 8px;
+        #custom-cursor-outline {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--accent-color);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s, opacity 0.4s;
+            z-index: 9999;
+        }
+        #custom-cursor.grow {
+            transform: translate(-50%, -50%) scale(8);
+            background-color: rgba(56, 189, 248, 0.2);
+        }
+        #custom-cursor-outline.hidden {
+            opacity: 0;
+        }
+
+        .glass-effect {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .glass-effect:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .section-title { color: var(--text-color-strong); }
+        .accent-color { color: var(--accent-color); }
+        .btn-primary { background-color: var(--accent-color); color: var(--btn-primary-text); transition: all 0.3s ease; }
+        .btn-primary:hover { background-color: var(--accent-color-darker); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2); }
+        .btn-secondary { background-color: transparent; color: var(--accent-color); border: 2px solid var(--accent-color); transition: all 0.3s ease; }
+        .btn-secondary:hover { background-color: var(--accent-color); color: var(--btn-primary-text); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2); }
+        
+        /* Interactive Timeline */
+        .timeline::before {
+            content: ''; position: absolute; left: 50%; transform: translateX(-50%); top: 0; bottom: 0; width: 2px;
+            background-color: var(--timeline-line);
+            height: 0;
+            transition: height 1.5s ease-out;
+        }
+        .timeline.animated::before {
+            height: 100%;
         }
         .timeline-dot {
-            content: '';
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            background-color: #38bdf8;
-            border-radius: 50%;
-            top: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1;
+            content: ''; position: absolute; width: 16px; height: 16px; border-radius: 50%; top: 24px; left: 50%; z-index: 1; background-color: var(--accent-color);
+            transform: translateX(-50%) scale(0);
+            transition: transform 0.5s ease-out;
         }
-         @media screen and (max-width: 768px) {
-            .timeline::before {
-                left: 8px;
-            }
-            .timeline-item {
-                width: 100%;
-                padding-left: 40px;
-                padding-right: 15px;
-            }
-            .timeline-item:nth-child(odd), .timeline-item:nth-child(even) {
-                left: 0;
-                text-align: left;
-            }
-            .timeline-dot {
-                left: 8px;
-            }
+        .timeline.animated .timeline-item:nth-child(1) .timeline-dot { transition-delay: 0.2s; transform: translateX(-50%) scale(1); }
+        .timeline.animated .timeline-item:nth-child(2) .timeline-dot { transition-delay: 0.4s; transform: translateX(-50%) scale(1); }
+        .timeline.animated .timeline-item:nth-child(3) .timeline-dot { transition-delay: 0.6s; transform: translateX(-50%) scale(1); }
+        .timeline.animated .timeline-item:nth-child(4) .timeline-dot { transition-delay: 0.8s; transform: translateX(-50%) scale(1); }
+        
+        .timeline-item { position: relative; width: 50%; padding: 20px 40px; box-sizing: border-box; }
+        .timeline-item:nth-child(odd) { left: 0; padding-right: 20px; text-align: right; }
+        .timeline-item:nth-child(even) { left: 50%; padding-left: 20px; text-align: left; }
+        .timeline-content { padding: 20px; border-radius: 8px; }
+        
+        /* Scroll-reveal animation */
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        
+        /* Typing animation */
+        .typing-cursor { display: inline-block; width: 3px; height: 1em; animation: blink 1s infinite; background-color: var(--accent-color); }
+        @keyframes blink { 50% { opacity: 0; } }
+        
+        #scroll-to-top { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; border-radius: 50%; display: none; align-items: center; justify-content: center; cursor: pointer; z-index: 100; opacity: 0; transition: opacity 0.3s, transform 0.3s; transform: translateY(20px); background-color: var(--accent-color); color: var(--btn-primary-text); }
+        #scroll-to-top.show { display: flex; opacity: 1; transform: translateY(0); }
+        
+        /* Project Modal */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-container { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 12px; padding: 2rem; width: 90%; max-width: 600px; max-height: 90vh; transform: scale(0.95); transition: transform 0.3s; }
+        .modal-overlay.active .modal-container { transform: scale(1); }
+        
+        /* New Project Card Animation */
+        .project-card {
+            overflow: hidden;
+        }
+        .project-card .card-content {
+            transition: transform 0.4s ease-out;
+        }
+        .project-card .card-overlay {
+            background: linear-gradient(to top, rgba(12, 16, 29, 0.9), rgba(12, 16, 29, 0));
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            transform: translateY(100%);
+            transition: transform 0.4s ease-out;
+        }
+        .project-card:hover .card-overlay {
+            transform: translateY(0);
+        }
+        .project-card:hover .card-content {
+            transform: translateY(-20px);
+        }
+
+        @media screen and (max-width: 768px) {
+            .timeline::before { left: 8px; }
+            .timeline-item { width: 100%; padding-left: 40px; padding-right: 15px; }
+            .timeline-item:nth-child(odd), .timeline-item:nth-child(even) { left: 0; text-align: left; }
+            .timeline-dot { left: 8px; }
+            #custom-cursor, #custom-cursor-outline { display: none; }
+            body { cursor: auto; }
         }
     </style>
 </head>
 <body>
+    <div id="custom-cursor"></div>
+    <div id="custom-cursor-outline"></div>
+    <canvas id="starfield-canvas"></canvas>
 
     <!-- Header & Navigation -->
     <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-white">Parth Patil</a>
+            <a href="#about" class="text-2xl font-bold text-white">Parth Patil</a>
             <div class="hidden md:flex space-x-6 items-center">
+                <a href="#about-me" class="text-gray-300 hover:text-white transition">About Me</a>
                 <a href="#experience" class="text-gray-300 hover:text-white transition">Experience</a>
                 <a href="#projects" class="text-gray-300 hover:text-white transition">Projects</a>
                 <a href="#skills" class="text-gray-300 hover:text-white transition">Skills</a>
-                <a href="Parth Patil Resume 27 July, 2025.pdf" target="_blank" class="btn-secondary font-semibold py-2 px-4 rounded-lg">Resume</a>
-                <a href="#contact" class="btn-primary font-semibold py-2 px-4 rounded-lg">Contact</a>
+                <button id="resume-btn" class="btn-secondary font-semibold py-2 px-4 rounded-lg">Resume</button>
             </div>
             <div class="md:hidden">
                 <button id="mobile-menu-button" class="text-white focus:outline-none">
@@ -133,44 +191,28 @@
                 </button>
             </div>
         </nav>
-        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#about-me" class="block py-2 text-gray-300 hover:text-white">About Me</a>
             <a href="#experience" class="block py-2 text-gray-300 hover:text-white">Experience</a>
             <a href="#projects" class="block py-2 text-gray-300 hover:text-white">Projects</a>
             <a href="#skills" class="block py-2 text-gray-300 hover:text-white">Skills</a>
-            <a href="#education" class="block py-2 text-gray-300 hover:text-white">Education</a>
-            <a href="Parth Patil Resume 27 July, 2025.pdf" target="_blank" class="block py-2 text-gray-300 hover:text-white">Resume</a>
-            <a href="#contact" class="block mt-2 btn-primary font-semibold py-2 px-4 rounded-lg text-center">Contact</a>
+            <button id="resume-btn-mobile" class="block mt-2 w-full btn-secondary font-semibold py-2 px-4 rounded-lg text-center">Resume</button>
         </div>
     </header>
 
-    <main class="container mx-auto px-6 py-12">
-
+    <main class="container mx-auto px-6 py-12 relative z-10">
         <!-- Hero/About Section -->
-        <section id="about" class="flex flex-col md:flex-row items-center justify-between py-20">
+        <section id="about" class="flex flex-col md:flex-row items-center justify-between py-20 min-h-screen">
             <div class="md:w-2/3 text-center md:text-left mb-10 md:mb-0">
-                <h1 class="text-4xl md:text-6xl font-bold text-white leading-tight">
-                    Hi, I'm Parth Patil
-                </h1>
-                <p class="text-xl md:text-2xl mt-2 accent-color font-semibold">
-                    Backend Developer & Tech Enthusiast
-                </p>
-                <p class="mt-6 text-lg max-w-2xl mx-auto md:mx-0">
-                    A passionate Computer Science student at VIT Bhopal with a focus on backend development and cloud technologies. I enjoy building robust applications and developing creative solutions to complex problems.
-                </p>
+                <h1 class="text-4xl md:text-6xl font-bold text-white leading-tight">Hi, I'm <span id="typing-name"></span><span class="typing-cursor"></span></h1>
+                <p class="text-xl md:text-2xl mt-2 accent-color font-semibold">Backend Developer & Tech Enthusiast</p>
+                <p class="mt-6 text-lg max-w-2xl mx-auto md:mx-0">A passionate Computer Science student at VIT Bhopal with a focus on backend development and cloud technologies. I enjoy building robust applications and developing creative solutions to complex problems.</p>
                 <div class="mt-8 flex flex-wrap justify-center md:justify-start items-center gap-4">
-                    <a href="mailto:parthpatil2605@gmail.com" class="btn-primary font-semibold py-3 px-6 rounded-lg flex items-center space-x-2">
-                        <i class="fas fa-envelope"></i>
-                        <span>Get in Touch</span>
-                    </a>
+                    <a href="mailto:parthpatil2605@gmail.com" class="btn-primary font-semibold py-3 px-6 rounded-lg flex items-center space-x-2"><i class="fas fa-envelope"></i><span>Get in Touch</span></a>
                 </div>
-                 <div class="mt-6 flex justify-center md:justify-start space-x-6">
-                    <a href="https://www.linkedin.com/in/pvp2605" target="_blank" class="text-gray-300 hover:text-white transition text-3xl">
-                        <i class="fab fa-linkedin"></i>
-                    </a>
-                    <a href="https://github.com/Parthpatil2605" target="_blank" class="text-gray-300 hover:text-white transition text-3xl">
-                        <i class="fab fa-github"></i>
-                    </a>
+                <div class="mt-6 flex justify-center md:justify-start space-x-6">
+                    <a href="https://www.linkedin.com/in/pvp2605" target="_blank" class="text-gray-300 hover:text-white transition text-3xl"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/Parthpatil2605" target="_blank" class="text-gray-300 hover:text-white transition text-3xl"><i class="fab fa-github"></i></a>
                 </div>
             </div>
             <div class="md:w-1/3 flex justify-center">
@@ -180,197 +222,284 @@
             </div>
         </section>
 
+        <!-- About Me Section -->
+        <section id="about-me" class="py-20 reveal">
+            <h2 class="section-title text-3xl md:text-4xl font-bold text-center mb-12">About Me</h2>
+            <div class="max-w-4xl mx-auto glass-effect rounded-lg p-8 md:p-12">
+                <p class="text-lg mb-4">
+                    Hello! I'm Parth, a computer science undergraduate with a deep-seated passion for technology and its potential to solve real-world problems. My journey into the world of coding began with a fascination for how complex systems work, which quickly evolved into a focus on backend development. I thrive on the logic of building scalable, efficient, and secure server-side applications.
+                </p>
+                <p class="text-lg mb-4">
+                    Beyond the code, I'm a natural leader and communicator, skills I've honed as a Content Lead for the Electric Vehicle Club. I enjoy the challenge of breaking down complex technical concepts into clear, engaging content. Whether I'm architecting a new database schema or anchoring a technical event, I bring a blend of analytical thinking and creative energy to everything I do.
+                </p>
+                <p class="text-lg">
+                    I am always eager to learn and grow, and I'm currently seeking opportunities where I can contribute my skills in a collaborative environment and tackle new challenges.
+                </p>
+            </div>
+        </section>
+
         <!-- Experience Section -->
-        <section id="experience" class="py-20">
+        <section id="experience" class="py-20 reveal">
             <h2 class="section-title text-3xl md:text-4xl font-bold text-center mb-12">Professional Experience</h2>
             <div class="relative timeline max-w-4xl mx-auto">
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content glass-effect">
-                        <p class="text-sm accent-color">October 2024</p>
-                        <h3 class="text-xl font-bold text-white mt-1">Hacktoberfest Contributor</h3>
-                        <p class="text-md font-semibold text-gray-300">Open Source Contribution</p>
-                        <p class="mt-2 text-gray-400">Actively contributed to various open-source projects, focusing on backend development and documentation.</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content glass-effect">
-                        <p class="text-sm accent-color">May 2024 - Aug 2024</p>
-                        <h3 class="text-xl font-bold text-white mt-1">GirlScript Summer of Code Contributor</h3>
-                        <p class="text-md font-semibold text-gray-300">Open Source Program</p>
-                        <p class="mt-2 text-gray-400">Contributed to projects, focusing on backend tasks and API development during the summer of code program.</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content glass-effect">
-                        <p class="text-sm accent-color">Feb 2024 - Present</p>
-                        <h3 class="text-xl font-bold text-white mt-1">Content Lead and Anchor</h3>
-                        <p class="text-md font-semibold text-gray-300">The Electric Vehicle Club</p>
-                        <p class="mt-2 text-gray-400">Led a team of 5 in content creation, event planning, and technical documentation. Anchored three technical and promotional events.</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content glass-effect">
-                        <p class="text-sm accent-color">Hackathon</p>
-                        <h3 class="text-xl font-bold text-white mt-1">Participant at Health Hack</h3>
-                        <p class="text-md font-semibold text-gray-300">Competitive Programming Event</p>
-                        <p class="mt-2 text-gray-400">Developed an innovative solution focused on healthcare technology within a competitive, time-bound environment.</p>
-                    </div>
-                </div>
+                <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content glass-effect"><p class="text-sm accent-color">October 2024</p><h3 class="text-xl font-bold text-white mt-1">Hacktoberfest Contributor</h3><p class="text-md font-semibold text-gray-300">Open Source Contribution</p><p class="mt-2">Actively contributed to various open-source projects, focusing on backend development and documentation.</p></div></div>
+                <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content glass-effect"><p class="text-sm accent-color">May 2024 - Aug 2024</p><h3 class="text-xl font-bold text-white mt-1">GirlScript Summer of Code Contributor</h3><p class="text-md font-semibold text-gray-300">Open Source Program</p><p class="mt-2">Contributed to projects, focusing on backend tasks and API development during the summer of code program.</p></div></div>
+                <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content glass-effect"><p class="text-sm accent-color">Feb 2024 - Present</p><h3 class="text-xl font-bold text-white mt-1">Content Lead and Anchor</h3><p class="text-md font-semibold text-gray-300">The Electric Vehicle Club</p><p class="mt-2">Led a team of 5 in content creation, event planning, and technical documentation. Anchored three technical and promotional events.</p></div></div>
+                <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content glass-effect"><p class="text-sm accent-color">Hackathon</p><h3 class="text-xl font-bold text-white mt-1">Participant at Health Hack</h3><p class="text-md font-semibold text-gray-300">Competitive Programming Event</p><p class="mt-2">Developed an innovative solution focused on healthcare technology within a competitive, time-bound environment.</p></div></div>
             </div>
         </section>
 
         <!-- Projects Section -->
-        <section id="projects" class="py-20">
+        <section id="projects" class="py-20 reveal">
             <h2 class="section-title text-3xl md:text-4xl font-bold text-center mb-12">My Projects</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Project 1: Health Ease -->
-                <div class="glass-effect rounded-lg p-6 flex flex-col justify-between hover:border-blue-500 transition border border-transparent">
-                    <div>
+                <div class="project-card glass-effect rounded-lg h-64 relative cursor-pointer" data-project-id="health-ease">
+                    <div class="p-6 h-full card-content">
                         <h3 class="text-xl font-bold text-white">Health Ease</h3>
                         <p class="mt-2">A centralized digital health record platform for secure and efficient healthcare data management.</p>
-                        <div class="mt-4 flex flex-wrap gap-2">
-                            <span class="bg-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Node.js</span>
-                            <span class="bg-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Express.js</span>
-                            <span class="bg-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">MongoDB</span>
-                            <span class="bg-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">AWS</span>
-                        </div>
                     </div>
-                    <div class="mt-6">
-                        <a href="https://github.com/Parthpatil2605/Health-Ease" target="_blank" class="font-semibold text-blue-400 hover:text-blue-300">View on GitHub <i class="fas fa-arrow-right ml-1"></i></a>
+                    <div class="card-overlay p-6 flex flex-col justify-end items-start h-full">
+                        <button class="font-semibold text-blue-300 hover:text-white text-lg">Learn More <i class="fas fa-arrow-right ml-1"></i></button>
                     </div>
                 </div>
-
-                <!-- Project 2: VITStay -->
-                <div class="glass-effect rounded-lg p-6 flex flex-col justify-between hover:border-blue-500 transition border border-transparent">
-                    <div>
+                <div class="project-card glass-effect rounded-lg h-64 relative cursor-pointer" data-project-id="vitstay">
+                    <div class="p-6 h-full card-content">
                         <h3 class="text-xl font-bold text-white">VITStay</h3>
                         <p class="mt-2">A web application for smart hostel selection featuring 3D visualization, roommate selection, and complaint management.</p>
-                        <div class="mt-4 flex flex-wrap gap-2">
-                            <span class="bg-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">React.js</span>
-                            <span class="bg-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Node.js</span>
-                            <span class="bg-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Three.js</span>
-                            <span class="bg-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">MongoDB</span>
-                        </div>
                     </div>
-                    <div class="mt-6">
-                        <a href="https://github.com/Parthpatil2605/VITStay" target="_blank" class="font-semibold text-blue-400 hover:text-blue-300">View on GitHub <i class="fas fa-arrow-right ml-1"></i></a>
+                    <div class="card-overlay p-6 flex flex-col justify-end items-start h-full">
+                        <button class="font-semibold text-blue-300 hover:text-white text-lg">Learn More <i class="fas fa-arrow-right ml-1"></i></button>
                     </div>
                 </div>
-
-                <!-- Project 3: Research Paper -->
-                <div class="glass-effect rounded-lg p-6 flex flex-col justify-between hover:border-blue-500 transition border border-transparent">
-                    <div>
+                <div class="project-card glass-effect rounded-lg h-64 relative cursor-pointer" data-project-id="research">
+                    <div class="p-6 h-full card-content">
                         <h3 class="text-xl font-bold text-white">Research Paper: HealthEase</h3>
                         <p class="mt-2">Co-authored a paper titled 'HealthEase: Connecting Lives with Care', accepted at 'WorldSUAS 2025', an IEEE conference.</p>
-                        <div class="mt-4 flex flex-wrap gap-2">
-                            <span class="bg-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Research</span>
-                            <span class="bg-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Healthcare IT</span>
-                             <span class="bg-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">IEEE</span>
-                        </div>
                     </div>
-                    <div class="mt-6">
-                        <a href="#" class="font-semibold text-gray-500 cursor-not-allowed">Publication Pending</a>
+                    <div class="card-overlay p-6 flex flex-col justify-end items-start h-full">
+                        <button class="font-semibold text-blue-300 hover:text-white text-lg">Learn More <i class="fas fa-arrow-right ml-1"></i></button>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Education Section -->
-        <section id="education" class="py-20">
-            <h2 class="section-title text-3xl md:text-4xl font-bold text-center mb-12">Education</h2>
-            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- B.Tech -->
-                <div class="glass-effect rounded-lg p-6">
-                    <p class="text-sm accent-color">Sept 2023 - Ongoing</p>
-                    <h3 class="text-xl font-bold text-white mt-1">Bachelor of Technology - BTech, CSE</h3>
-                    <p class="text-md font-semibold text-gray-300">VIT Bhopal University</p>
-                    <p class="mt-2 text-gray-400">CGPA: 9.00 / 10.00</p>
-                </div>
-                <!-- Class XII -->
-                <div class="glass-effect rounded-lg p-6">
-                    <p class="text-sm accent-color">May 2023</p>
-                    <h3 class="text-xl font-bold text-white mt-1">Class XII (SSC)</h3>
-                    <p class="text-md font-semibold text-gray-300">Global Public School and Jr. College, Dindori</p>
-                    <p class="mt-2 text-gray-400">Percentage: 77%</p>
-                </div>
-                <!-- Class X -->
-                <div class="glass-effect rounded-lg p-6 md:col-span-2">
-                     <p class="text-sm accent-color">May 2021</p>
-                    <h3 class="text-xl font-bold text-white mt-1">Class X (ICSE)</h3>
-                    <p class="text-md font-semibold text-gray-300">Podar International School, Nashik</p>
-                    <p class="mt-2 text-gray-400">Percentage: 96.16%</p>
                 </div>
             </div>
         </section>
         
-        <!-- Certifications Section -->
-        <section id="certifications" class="py-20">
-            <h2 class="section-title text-3xl md:text-4xl font-bold text-center mb-12">Certifications</h2>
-            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="glass-effect rounded-lg p-6 text-center">
-                    <i class="fas fa-certificate text-4xl accent-color mb-3"></i>
-                    <h3 class="text-lg font-bold text-white">Fundamentals of AI and ML</h3>
-                </div>
-                <div class="glass-effect rounded-lg p-6 text-center">
-                    <i class="fas fa-certificate text-4xl accent-color mb-3"></i>
-                    <h3 class="text-lg font-bold text-white">Python Essentials</h3>
-                </div>
-                <div class="glass-effect rounded-lg p-6 text-center">
-                    <i class="fas fa-certificate text-4xl accent-color mb-3"></i>
-                    <h3 class="text-lg font-bold text-white">MATLAB Onramp</h3>
-                </div>
-                 <div class="glass-effect rounded-lg p-6 text-center">
-                    <i class="fas fa-certificate text-4xl accent-color mb-3"></i>
-                    <h3 class="text-lg font-bold text-white">Programming in Java</h3>
-                </div>
-            </div>
-        </section>
-
-        <!-- Skills Section -->
-        <section id="skills" class="py-20">
-            <h2 class="section-title text-3xl md:text-4xl font-bold text-center mb-12">My Skills</h2>
-            <div class="max-w-4xl mx-auto">
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-8 text-center">
-                    <div class="p-4 glass-effect rounded-lg"><i class="fab fa-java text-4xl accent-color mb-2"></i><p>Java</p></div>
-                    <div class="p-4 glass-effect rounded-lg"><i class="fab fa-js-square text-4xl accent-color mb-2"></i><p>JavaScript</p></div>
-                    <div class="p-4 glass-effect rounded-lg"><i class="fas fa-database text-4xl accent-color mb-2"></i><p>SQL</p></div>
-                    <div class="p-4 glass-effect rounded-lg"><i class="fab fa-node-js text-4xl accent-color mb-2"></i><p>Node.js</p></div>
-                    <div class="p-4 glass-effect rounded-lg"><i class="fas fa-server text-4xl accent-color mb-2"></i><p>Express.js</p></div>
-                    <div class="p-4 glass-effect rounded-lg"><i class="fab fa-aws text-4xl accent-color mb-2"></i><p>AWS</p></div>
-                </div>
-            </div>
-        </section>
-
+        <!-- Other sections -->
+        <section id="education" class="py-20 reveal"><h2 class="section-title text-3xl md:text-4xl font-bold text-center mb-12">Education</h2><div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8"><div class="glass-effect rounded-lg p-6"><p class="text-sm accent-color">Sept 2023 - Ongoing</p><h3 class="text-xl font-bold text-white mt-1">Bachelor of Technology - BTech, CSE</h3><p class="text-md font-semibold">VIT Bhopal University</p><p class="mt-2">CGPA: 9.00 / 10.00</p></div><div class="glass-effect rounded-lg p-6"><p class="text-sm accent-color">May 2023</p><h3 class="text-xl font-bold text-white mt-1">Class XII (SSC)</h3><p class="text-md font-semibold">Global Public School and Jr. College, Dindori</p><p class="mt-2">Percentage: 77%</p></div><div class="glass-effect rounded-lg p-6 md:col-span-2"><p class="text-sm accent-color">May 2021</p><h3 class="text-xl font-bold text-white mt-1">Class X (ICSE)</h3><p class="text-md font-semibold">Podar International School, Nashik</p><p class="mt-2">Percentage: 96.16%</p></div></div></section>
+        <section id="certifications" class="py-20 reveal"><h2 class="section-title text-3xl md:text-4xl font-bold text-center mb-12">Certifications</h2><div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"><div class="glass-effect rounded-lg p-6 text-center"><i class="fas fa-certificate text-4xl accent-color mb-3"></i><h3 class="text-lg font-bold text-white">Fundamentals of AI and ML</h3></div><div class="glass-effect rounded-lg p-6 text-center"><i class="fas fa-certificate text-4xl accent-color mb-3"></i><h3 class="text-lg font-bold text-white">Python Essentials</h3></div><div class="glass-effect rounded-lg p-6 text-center"><i class="fas fa-certificate text-4xl accent-color mb-3"></i><h3 class="text-lg font-bold text-white">MATLAB Onramp</h3></div><div class="glass-effect rounded-lg p-6 text-center"><i class="fas fa-certificate text-4xl accent-color mb-3"></i><h3 class="text-lg font-bold text-white">Programming in Java</h3></div></div></section>
+        <section id="skills" class="py-20 reveal"><h2 class="section-title text-3xl md:text-4xl font-bold text-center mb-12">My Skills</h2><div class="max-w-4xl mx-auto"><div class="grid grid-cols-2 md:grid-cols-3 gap-8 text-center"><div class="p-4 glass-effect rounded-lg"><i class="fab fa-java text-4xl accent-color mb-2"></i><p>Java</p></div><div class="p-4 glass-effect rounded-lg"><i class="fab fa-js-square text-4xl accent-color mb-2"></i><p>JavaScript</p></div><div class="p-4 glass-effect rounded-lg"><i class="fas fa-database text-4xl accent-color mb-2"></i><p>SQL</p></div><div class="p-4 glass-effect rounded-lg"><i class="fab fa-node-js text-4xl accent-color mb-2"></i><p>Node.js</p></div><div class="p-4 glass-effect rounded-lg"><i class="fas fa-server text-4xl accent-color mb-2"></i><p>Express.js</p></div><div class="p-4 glass-effect rounded-lg"><i class="fab fa-aws text-4xl accent-color mb-2"></i><p>AWS</p></div></div></div></section>
+        <footer id="contact" class="py-20 reveal"><div class="text-center"><h2 class="text-2xl font-bold text-white">Get In Touch</h2><p class="mt-4 max-w-xl mx-auto">I'm currently open to new opportunities and collaborations. Feel free to reach out via email or connect with me on social media.</p><div class="mt-8"><a href="mailto:parthpatil2605@gmail.com" class="btn-primary font-semibold py-3 px-8 rounded-lg text-lg">Say Hello</a></div><div class="mt-8 flex justify-center space-x-6"><a href="https://www.linkedin.com/in/pvp2605" target="_blank" class="text-gray-300 hover:text-white transition text-2xl"><i class="fab fa-linkedin"></i></a><a href="https://github.com/Parthpatil2605" target="_blank" class="text-gray-400 hover:text-white transition text-2xl"><i class="fab fa-github"></i></a></div><p class="mt-8 text-sm text-gray-500">&copy; 2025 Parth Patil. All rights reserved.</p></div></footer>
     </main>
 
-    <!-- Footer -->
-    <footer id="contact" class="bg-gray-900/80 border-t border-gray-700">
-        <div class="container mx-auto px-6 py-12 text-center">
-            <h2 class="text-2xl font-bold text-white">Get In Touch</h2>
-            <p class="mt-4 max-w-xl mx-auto">I'm currently open to new opportunities and collaborations. Feel free to reach out via email or connect with me on social media.</p>
-            <div class="mt-8">
-                <a href="mailto:parthpatil2605@gmail.com" class="btn-primary font-semibold py-3 px-8 rounded-lg text-lg">
-                    Say Hello
-                </a>
-            </div>
-            <div class="mt-8 flex justify-center space-x-6">
-                <a href="https://www.linkedin.com/in/pvp2605" target="_blank" class="text-gray-400 hover:text-white transition text-2xl"><i class="fab fa-linkedin"></i></a>
-                <a href="https://github.com/Parthpatil2605" target="_blank" class="text-gray-400 hover:text-white transition text-2xl"><i class="fab fa-github"></i></a>
-            </div>
-            <p class="mt-8 text-gray-500">&copy; 2025 Parth Patil. All rights reserved.</p>
-        </div>
-    </footer>
+    <!-- Scroll to Top & Modals -->
+    <button id="scroll-to-top" title="Go to top"><i class="fas fa-arrow-up"></i></button>
+    <div id="project-modal" class="modal-overlay"><div id="modal-container" class="modal-container overflow-y-auto"></div></div>
+    <div id="resume-modal" class="modal-overlay"><div id="resume-modal-container" class="modal-container"></div></div>
 
     <script>
-        // --- Basic Setup ---
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Mobile Menu Toggle ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+
+            // --- Typing Animation ---
+            const nameElement = document.getElementById('typing-name');
+            const nameToType = "Parth Patil";
+            let i = 0;
+            function typeName() {
+                if (i < nameToType.length) {
+                    nameElement.textContent += nameToType.charAt(i++);
+                    setTimeout(typeName, 150);
+                }
+            }
+            typeName();
+
+            // --- Scroll-Reveal & Timeline Animation ---
+            const revealElements = document.querySelectorAll('.reveal');
+            const observerCallback = (entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        const timeline = entry.target.querySelector('.timeline');
+                        if (timeline) {
+                            timeline.classList.add('animated');
+                        }
+                    }
+                });
+            };
+            const observer = new IntersectionObserver(observerCallback, { threshold: 0.15 });
+            revealElements.forEach(el => observer.observe(el));
+            
+            // --- Project Card Click (for Modal) ---
+            const projectCards = document.querySelectorAll('.project-card');
+            projectCards.forEach(card => {
+                card.addEventListener('click', () => openProjectModal(card.dataset.projectId));
+            });
+
+            // --- Scroll-to-Top Button ---
+            const scrollToTopBtn = document.getElementById('scroll-to-top');
+            window.addEventListener('scroll', () => {
+                scrollToTopBtn.classList.toggle('show', window.pageYOffset > 300);
+            });
+            scrollToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+            // --- Custom Cursor ---
+            const cursor = document.getElementById('custom-cursor');
+            const cursorOutline = document.getElementById('custom-cursor-outline');
+            const interactiveElements = document.querySelectorAll('a, button, .project-card');
+            if (cursor) {
+                window.addEventListener('mousemove', e => {
+                    cursor.style.left = cursorOutline.style.left = e.clientX + 'px';
+                    cursor.style.top = cursorOutline.style.top = e.clientY + 'px';
+                });
+                interactiveElements.forEach(el => {
+                    el.addEventListener('mouseenter', () => {
+                        cursor.classList.add('grow');
+                        cursorOutline.classList.add('hidden');
+                    });
+                    el.addEventListener('mouseleave', () => {
+                        cursor.classList.remove('grow');
+                        cursorOutline.classList.remove('hidden');
+                    });
+                });
+            }
+            
+            // --- Starfield Canvas ---
+            const canvas = document.getElementById('starfield-canvas');
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                let stars = [];
+                const numStars = 200;
+
+                const setCanvasSize = () => {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                };
+
+                class Star {
+                    constructor() { this.reset(); }
+                    reset() {
+                        this.x = Math.random() * canvas.width;
+                        this.y = Math.random() * canvas.height;
+                        this.z = Math.random() * canvas.width;
+                    }
+                    draw() {
+                        let x, y, radius;
+                        x = (this.x - canvas.width / 2) * (canvas.width / this.z) + canvas.width / 2;
+                        y = (this.y - canvas.height / 2) * (canvas.width / this.z) + canvas.height / 2;
+                        radius = (1 - this.z / canvas.width) * 2;
+                        ctx.beginPath();
+                        ctx.arc(x, y, radius, 0, Math.PI * 2);
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                        ctx.fill();
+                    }
+                    update() {
+                        this.z -= 0.5;
+                        if (this.z < 1) { this.reset(); }
+                        this.draw();
+                    }
+                }
+                
+                const initStars = () => {
+                    stars = [];
+                    for (let i = 0; i < numStars; i++) {
+                        stars.push(new Star());
+                    }
+                };
+                
+                function animate() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    stars.forEach(star => star.update());
+                    requestAnimationFrame(animate);
+                }
+                
+                window.addEventListener('resize', () => {
+                    setCanvasSize();
+                    initStars();
+                });
+
+                setCanvasSize();
+                initStars();
+                animate();
+            }
+
+            // --- Modal Logic ---
+            const projectModalOverlay = document.getElementById('project-modal');
+            const projectModalContainer = document.getElementById('modal-container');
+            const resumeModalOverlay = document.getElementById('resume-modal');
+            const resumeModalContainer = document.getElementById('resume-modal-container');
+            
+            // Project Modal
+            const projectData = {
+                'health-ease': {
+                    title: 'Health Ease',
+                    description: 'HealthEase is a robust, centralized digital health record platform designed to streamline healthcare data management. It provides a secure and efficient way for patients and doctors to access medical records, ensuring data integrity and privacy. The backend is built to handle concurrent requests and scales effectively using AWS services.',
+                    role: 'Backend Developer',
+                    tech: ['Node.js', 'Express.js', 'MongoDB', 'AWS S3', 'JWT'],
+                    link: 'https://github.com/Parthpatil2605/Health-Ease'
+                },
+                'vitstay': {
+                    title: 'VITStay',
+                    description: 'A comprehensive web application that revolutionizes the hostel selection process for students. It features an interactive 3D visualization of hostel rooms, a smart roommate matching system based on preferences, and an integrated complaint management portal. The goal was to create a seamless and user-friendly experience for students managing their accommodation.',
+                    role: 'Backend Developer',
+                    tech: ['React.js', 'Node.js', 'Three.js', 'MongoDB', 'Socket.IO'],
+                    link: 'https://github.com/Parthpatil2605/VITStay'
+                },
+                'research': {
+                    title: 'Research Paper: HealthEase',
+                    description: "Co-authored a research paper titled 'HealthEase: Connecting Lives with Care', which was accepted for publication at 'WorldSUAS 2025', the flagship conference of the IEEE Madhya Pradesh Section. The paper details the architecture and impact of the HealthEase platform, contributing to the field of digital healthcare solutions.",
+                    role: 'Co-Author & Developer',
+                    tech: ['Academic Writing', 'Research', 'System Architecture', 'Healthcare IT'],
+                    link: null
+                }
+            };
+
+            const openProjectModal = (projectId) => {
+                const data = projectData[projectId];
+                if (!data) return;
+
+                let techHtml = data.tech.map(t => `<span class="bg-gray-700 text-xs font-semibold mr-2 mb-2 px-2.5 py-0.5 rounded">${t}</span>`).join('');
+                let linkHtml = data.link ? `<a href="${data.link}" target="_blank" class="btn-primary font-semibold py-2 px-4 rounded-lg mt-6 inline-block">View on GitHub</a>` : `<p class="mt-6 text-gray-400">Publication Pending</p>`;
+
+                projectModalContainer.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-2xl font-bold text-white mb-4">${data.title}</h3>
+                        <button class="modal-close-btn text-2xl text-gray-400 hover:text-white">&times;</button>
+                    </div>
+                    <p class="font-semibold accent-color mb-2">My Role: ${data.role}</p>
+                    <p class="mb-4">${data.description}</p>
+                    <div class="flex flex-wrap mb-4">${techHtml}</div>
+                    ${linkHtml}
+                `;
+                projectModalOverlay.classList.add('active');
+            };
+
+            // Resume Modal
+            const openResumeModal = () => {
+                resumeModalContainer.innerHTML = `
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-2xl font-bold text-white">My Resume</h3>
+                        <button class="modal-close-btn text-2xl text-gray-400 hover:text-white">&times;</button>
+                    </div>
+                    <div class="h-[calc(80vh-60px)]">
+                        <iframe src="Parth Patil Resume 27 July, 2025.pdf" width="100%" height="100%" style="border:none;"></iframe>
+                    </div>
+                `;
+                resumeModalOverlay.classList.add('active');
+            };
+
+            // General Modal Closing Logic
+            document.querySelectorAll('.modal-overlay').forEach(overlay => {
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay || e.target.closest('.modal-close-btn')) {
+                        overlay.classList.remove('active');
+                    }
+                });
+            });
+            
+            document.getElementById('resume-btn').addEventListener('click', openResumeModal);
+            document.getElementById('resume-btn-mobile').addEventListener('click', openResumeModal);
         });
     </script>
 </body>
